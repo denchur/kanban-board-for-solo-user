@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="content">
+  <div class="container p-0">
+
+      <center><h1 class="h3 mb-3"> Здравствуйте, {{ worker }} ниже представлен ваш список задач
+      </center>
+      {% if user.is_authenticated %}
+      <div class="row">
+          <div class="col-12 col-lg-6 col-xl-3">
+              <div class="card card-border-primary">
+                  <div class="card-header">
+                      <h5 class="card-title">В планах</h5>
+                      <h6 class="card-subtitle text-muted"></h6>
+                  </div>
+                  <div class="card-body p-3">
+                    {% for task in task_stage_one %}
+                      <div class="card mb-3 bg-light">
+                        
+                          <div class="card-body p-2">
+                              <p>{{ task.title }}
+                                <h5 class="badge 
+                                {% if task.priority.pk == 1 %}
+                                  bg-primary 
+                                {% elif task.priority.pk == 2 %}
+                                  bg-warning 
+                                {% elif task.priority.pk == 3 %}
+                                  bg-danger
+                                {% endif %}
+                                text-wrap" style="width: 5rem;">
+                                {{ task.priority}}
+                              </h5>
+                              </p>
+                              <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 0%"></div>
+                              </div>
+                              <br>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_detail' task.pk %}">View</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_edit' task.pk %}">Edit</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:delete_task' task.pk%}">Delete</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:update_stage' task.pk %}">Update step</a>
+                          </div>
+                          
+                      </div>
+                      {% endfor %}
+                      <a href="{% url 'tasks:task_create'%}" class="btn btn-primary btn-block">Add new</a>
+                  </div>
+              </div> 
+          </div>
+
+          <div class="col-12 col-lg-6 col-xl-3">
+              <div class="card card-border-warning">
+                  <div class="card-header">
+                      <h5 class="card-title">Выполнение</h5>
+                      <h6 class="card-subtitle text-muted"></h6>
+                  </div>
+                  <div class="card-body">
+                    {% for task in task_stage_two %}
+                      <div class="card mb-3 bg-light">
+                          <div class="card-body p-3">
+                            <p>{{ task.title }}
+                                <h5 class="badge 
+                                {% if task.priority.pk == 1 %}
+                                  bg-primary 
+                                {% elif task.priority.pk == 2 %}
+                                  bg-warning 
+                                {% elif task.priority.pk == 3 %}
+                                  bg-danger
+                                {% endif %}
+                                text-wrap" style="width: 5rem;">
+                                {{ task.priority}}
+                              </h5>
+                              </p>
+                              <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 33%"></div>
+                              </div>
+                              <br>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_detail' task.pk %}">View</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_edit' task.pk %}">Edit</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:delete_task' task.pk%}">Delete</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:update_stage' task.pk %}">Update step</a>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+          <div class="col-12 col-lg-6 col-xl-3">
+              <div class="card card-border-danger">
+                  <div class="card-header">
+                      <h5 class="card-title">Проверка</h5>
+                      <h6 class="card-subtitle text-muted"></h6>
+                  </div>
+                  <div class="card-body">
+                    {% for task in task_stage_three%}
+                      <div class="card mb-3 bg-light">
+                          <div class="card-body p-3">
+                            <p>{{ task.title }}
+                                <h5 class="badge 
+                                {% if task.priority.pk == 1 %}
+                                  bg-primary 
+                                {% elif task.priority.pk == 2 %}
+                                  bg-warning 
+                                {% elif task.priority.pk == 3 %}
+                                  bg-danger
+                                {% endif %}
+                                text-wrap" style="width: 5rem;">
+                                {{ task.priority}}
+                              </h5>
+                              </p>
+                              <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 66%"></div>
+                              </div>
+                              <br>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_detail' task.pk %}">View</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_edit' task.pk %}">Edit</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:delete_task' task.pk%}">Delete</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:update_stage' task.pk %}">Update step</a>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+          <div class="col-12 col-lg-6 col-xl-3">
+              <div class="card card-border-success">
+                  <div class="card-header">
+                      <h5 class="card-title">Выполнено</h5>
+                      <h6 class="card-subtitle text-muted"></h6>
+                  </div>
+                  <div class="card-body">
+                    {% for task in task_stage_four%}
+                      <div class="card mb-3 bg-light">
+                          <div class="card-body p-3">
+                            <p>{{ task.title }}
+                                <h5 class="badge 
+                                {% if task.priority.pk == 1 %}
+                                  bg-primary 
+                                {% elif task.priority.pk == 2 %}
+                                  bg-warning 
+                                {% elif task.priority.pk == 3 %}
+                                  bg-danger
+                                {% endif %}
+                                text-wrap" style="width: 5rem;">
+                                {{ task.priority}}
+                              </h5>
+                              </p>
+                              <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 100%"></div>
+                              </div>
+                              <br>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_detail' task.pk %}">View</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_edit' task.pk %}">Edit</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:delete_task' task.pk%}">Delete</a>
+                              <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:update_stage' task.pk %}">Update step</a>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %} 
+  Задача - {{ task.title|truncatechars:30 }}
+{% endblock %}
+{% block content %}
+{% if user == task.worker %}
+  <div class="row">
+    <aside class="col-12 col-md-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          Дата создания задачи : {{ task.start_task|date:"d E Y" }}
+        </li>
+        {% if task.stage.pk == 4 %}
+        <li class="list-group-item">
+          Дата выполнения задачи : {{ task.complate_task|date:"d E Y" }}
+        </li>
+        {% endif %}
+        <li class="list-group-item">
+          Стадия выполнения  : {{ task.stage.name }}
+          <br>
+          всего стадий : {{ stage.count }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Всего задач: <span>{{ task.worker.tasks.count }}</span>
+        </li>
+      </ul>
+    </aside>
+  <article class="col-12 col-md-9">
+    <h1 align='center'> {{ task.title }}</h1>
+    <p>
+      {{ task.description|linebreaksbr }}
+    </p>
+    <div class="d-grid gap-2 col-3 mx-auto">
+      <a class="btn btn-primary btn-sm" type="button" href = "{% url 'tasks:task_edit' task.pk %}">Редактировать описание</a>
+    </div>
+  </article>
+  {% endif %}
+{% endblock %}
