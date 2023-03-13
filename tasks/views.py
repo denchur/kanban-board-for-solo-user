@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
 from .models import Task, User, Stage
 from .forms import TaskForm, StageUpdateForm
 
@@ -36,14 +38,17 @@ def tasks(request, username):
 
 def task(request, task_id):
     task = get_object_or_404(Task, pk = task_id)
-    stage = Stage.objects.all()
-    context = {
-        'task': task,
-        'stage': stage,
-    }
-    return render(request, 'tasks/task_detail.html', context)
+    if request.user == task.worker:
+        stage = Stage.objects.all()
+        context = {
+            'task': task,
+            'stage': stage,
+        }
+        return render(request, 'tasks/task_detail.html', context)
+    else:
+        return redirect('tasks:tasks', request.user)
 
-
+@login_required
 def task_create(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -60,7 +65,7 @@ def task_create(request):
     }
     return render(request, 'tasks/task_create.html', context)
 
-
+@login_required
 def task_edit(request, task_id):
     task = get_object_or_404(Task, pk = task_id)
     worker = task.worker
@@ -78,7 +83,7 @@ def task_edit(request, task_id):
     if request.user != worker:
         return redirect('tasks:tasks', request.user)
 
-
+@login_required
 def stage_update(request, task_id):
     task = get_object_or_404(Task, pk = task_id)
     worker = task.worker
@@ -96,7 +101,7 @@ def stage_update(request, task_id):
     if request.user != worker:
         return redirect('tasks:tasks', request.user)
     
-
+@login_required
 def delete_task(request, task_id):
     task = get_object_or_404(Task, pk = task_id)
     worker = task.worker
