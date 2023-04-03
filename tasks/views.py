@@ -1,11 +1,12 @@
+import datetime 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
-from .models import Task, User, Stage
-from .forms import TaskForm, StageUpdateForm
+from .models import Task, Stage
+from .forms import TaskForm, StageUpdateForm, CommentForm
 
-
-# Create your views here.
+User = get_user_model()
 def index(request):
     if request.user.is_authenticated:
         return redirect('tasks:tasks', request.user)
@@ -13,11 +14,12 @@ def index(request):
         return redirect('users:login')
 
 
+@login_required
 def tasks(request, username):
-    if request.user.is_authenticated == False:
-        return redirect('users:login')
     worker = get_object_or_404(User, username = username)
     worker_task = Task.objects.filter(worker = worker)
+    now = datetime.datetime.now()
+    date = now.date()
     if request.user == worker:
         task_stage_one = worker_task.filter(stage = 1)
         task_stage_two = worker_task.filter(stage = 2)
@@ -30,19 +32,34 @@ def tasks(request, username):
             'task_stage_four': task_stage_four,
             'worker': worker,
             'worker_task': worker_task,
+            'date':date,
         }
         return render(request, 'tasks/tasks.html', context)
     else:
         return redirect('tasks:tasks', request.user)
 
+@login_required
+def add_comment(request, task_id):
+    form = CommentForm(request.POST or None)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.author = request.user
+        comment.task = get_object_or_404(Task, pk=task_id)
+        comment.save()
+    return redirect('tasks:task_detail', task_id=task_id)
+
 
 def task(request, task_id):
     task = get_object_or_404(Task, pk = task_id)
+    form = CommentForm()
+    comments =  task.comments.all()
     if request.user == task.worker:
         stage = Stage.objects.all()
         context = {
             'task': task,
             'stage': stage,
+            'comments':comments,
+            'form': form,
         }
         return render(request, 'tasks/task_detail.html', context)
     else:
@@ -86,11 +103,15 @@ def task_edit(request, task_id):
 @login_required
 def stage_update(request, task_id):
     task = get_object_or_404(Task, pk = task_id)
+    now = datetime.datetime.now()
+    
     worker = task.worker
     if request.user == worker:
         form = StageUpdateForm(request.POST or None, instance = task)
         if request.method == 'POST' and form.is_valid:
-            task = form.save()
+            tasks = form.save(commit = False)
+            tasks.complate_task= now.date()
+            task.save()
             return redirect('tasks:tasks', request.user)
         context = {
             'form': form,

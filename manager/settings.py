@@ -15,9 +15,13 @@ SECRET_KEY = '4=rzm*%9zo4%p*1bzeq%6wuuh6t(4x6o8k@6$gq8pg%%gk-$0z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'denchu.r@yandex.ru'
+EMAIL_HOST_PASSWORD = 'xlzimullbgzalgrs'
+DEFAULT_FROM_EMAIL = 'denchu.r@yandex.ru'
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'tasks:home_page'
 

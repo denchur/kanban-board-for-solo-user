@@ -3,7 +3,7 @@
 <main class="content">
   <div class="container p-0">
 
-      <center><h1 class="h3 mb-3"> Здравствуйте, {{ worker }} ниже представлен ваш список задач
+      <center><h1 class="h3 mb-3"> Здравствуйте, {{ worker.get_short_name }} ниже представлен ваш список задач
       </center>
       {% if user.is_authenticated %}
       <div class="row">
@@ -34,6 +34,8 @@
                               <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                                 <div class="progress-bar" style="width: 0%"></div>
                               </div>
+                              <small class="text-muted">Дата дедлайна:</small>
+                              <small class="text-muted">{{ task.dedline_task|date:"d E Y" }}</small>
                               <br>
                               <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_detail' task.pk %}">View</a>
                               <a class="btn btn-outline-primary btn-sm" href="{% url 'tasks:task_edit' task.pk %}">Edit</a>

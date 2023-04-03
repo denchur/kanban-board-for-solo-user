@@ -29,15 +29,19 @@ class Task(models.Model):
         verbose_name= "Описание задчи"
         )
     start_task = models.DateTimeField(
-        auto_now_add= False,
-        default= datetime.datetime.now(),
+        auto_now_add= True,
         verbose_name= 'Дата создания задчи',
     )
-    complate_task = models.DateTimeField(
+    dedline_task = models.DateTimeField(
         auto_now_add= False,
         null=True,
         blank=True,
-        verbose_name= 'Дата завершения задчи',
+        verbose_name= 'Дата планируемого дедлайна',
+    )
+    complate_task = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name = 'Дата завершения задачи',
     )
     stage = models.ForeignKey(
         Stage,
@@ -66,5 +70,11 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
-          
+
+
+class Comment(models.Model):
+    task = models.ForeignKey(Task, related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    text = models.TextField()
+    creted = models.DateField(auto_now_add=True)
 

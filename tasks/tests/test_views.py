@@ -27,6 +27,7 @@ class TestTaskTemplate(TestCase):
         self.auth_client.force_login(self.user)
     
     def TestViewsUseNecessaryTemplates(self):
+        '''Страницы сайта используют правильные шаблоны'''
         templates_pages_names = {
             reverse('tasks:home_page'):'tasks/index.html',
             reverse('tasks:tasks', kwargs = {'username': self.auth_client}):'tasks/tasks.html',

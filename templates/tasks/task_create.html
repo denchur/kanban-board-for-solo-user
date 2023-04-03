@@ -47,9 +47,13 @@
                 <button type="submit" class="btn btn-primary">
                   {% if is_edit %}
                     Сохранить
-                  {% else %}   
+                  {% endif %}
+                  {% if is_edit == False%}   
                     Добавить
-                  {% endif %}         
+                  {% endif %}
+                  {% if is_update_stage %}
+                    Обновить стадию
+                  {% endif %}       
                 </button>
               </div>
             </form>

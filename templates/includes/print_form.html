@@ -1,6 +1,6 @@
 {% load user_filters %}
 {% for field in form %}
-  <div class="form-group row my-3"
+  <div class="form-group row my-3 p-3"
     {% if field.field.required %} 
       aria-required="true"
     {% else %}
@@ -13,7 +13,7 @@
         <span class="required text-danger">*</span>
       {% endif %}
     </label>
-    <div>
+    <div >
       {{ field|addclass:'form-control' }}
       {% if field.help_text %}
         <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
